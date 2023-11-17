@@ -11,7 +11,7 @@ figure(1)
 % imshow(im)
 % hold on
 
-gv = linspace(-30,30,50); % adjust for appropriate domain
+gv = linspace(-30,30,100); % adjust for appropriate domain
 [x, y, z]=meshgrid(gv, gv, gv);
 axis equal
 
@@ -21,21 +21,24 @@ for jjj = 1:nrcyl
     CC = CCs(:,:,jjj);
     VP = VPs(:,jjj);
     [U,S,V] = svd(CC);
-    S = S./10000000000000000000;
+    % S = S./1000000000000000000000;
+    S = S.*10;
+    S(16) = 0;
     U = U./U(16);
     U([4,8,12,13,14,15,16]) = zeros(1, 7);
-    CC = U'*S*U;
+    % CC = U'*S*U;
+    % CC = S;
     % CC = [1, 1, 1, 1; 1, 1, 0, 0; 1, 0, 1, 0; 1, 0, 0, 1];
     % CC = fliplr(fliplr(CC).');
     % F = CC(1) + CC(6)*x.*x + CC(11)*y.*y + CC(16)*z.*z + 2*CC(2)*x + 2*CC(3)*y + 2*CC(4)*z + 2*CC(7)*x.*y + 2*CC(8)*x.*z + 2*CC(12)*y.*z;
-    % F = CC(16) + CC(1)*x.*x + CC(6)*y.*y + CC(11)*z.*z + 2*CC(13)*x + 2*CC(14)*y + 2*CC(15)*z + 2*CC(2)*x.*y + 2*CC(3)*x.*z + 2*CC(8)*y.*z
+    F = - CC(16) + CC(1)*x.*x + CC(6)*y.*y + CC(11)*z.*z + 2*CC(13)*x + 2*CC(14)*y + 2*CC(15)*z + 2*CC(2)*x.*y + 2*CC(3)*x.*z + 2*CC(8)*y.*z;
     % a = append(num2str(CC(16)), " + ", num2str(CC(1)), "*x^2 + ", num2str(CC(6)), "*y^2 + ", num2str(CC(11)), "*z^2 + ", num2str(2*CC(13)), "*x + ", num2str(2*CC(14)), "*y + ", num2str(2*CC(15)), "*z + ", num2str(2*CC(2)), "*x*y + ", num2str(2*CC(3)), "*x*z +", num2str(2*CC(8)), "*y*z", "=0");
-    a = append(num2str(CC(1)), " + ", num2str(CC(6)), "*x^2 + ", num2str(CC(11)), "*y^2 + ", num2str(CC(16)), "*z^2 + ", num2str(2*CC(2)), "*x + ", num2str(2*CC(3)), "*y + ", num2str(2*CC(4)), "*z + ", num2str(2*CC(7)), "*x*y + ", num2str(2*CC(8)), "*x*z +", num2str(2*CC(12)), "*y*z", "=0");
+    a = append(nts(-CC(1)), " + ", nts(CC(6)), "*x^2 + ", nts(CC(11)), "*y^2 + ", nts(CC(16)), "*z^2 + ", nts(2*CC(2)), "*x + ", nts(2*CC(3)), "*y + ", nts(2*CC(4)), "*z + ", nts(2*CC(7)), "*x*y + ", nts(2*CC(8)), "*x*z +", nts(2*CC(12)), "*y*z", "=0");
     % a = append(num2str(VP(1)), "*x + ", num2str(VP(2)), "*y + ", num2str(VP(3)), "*z + ", num2str(VP(4)), " = 0");
     disp(a);
     disp(a);
     % F = sqrt(x.^2 + y.^2 + z.^2) - 10;
-    % isosurface(x, y, z, F, 0);
+    isosurface(x, y, z, F, 0);
     % [l1,l2] = linesfromquadric(CCs(:,:,jjj),VPs(:,jjj),Pgt);
     % rital(ll(:,2*jjj-1),'b-');
     % rital(l1,'r--');

@@ -1,0 +1,4 @@
+
+function [s] = nts(n)
+    num2str(n)
+end
